@@ -1,26 +1,235 @@
 @import "tailwindcss";
+@import "devicon/devicon.min.css";
+
+/* Global scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  scroll-behavior: smooth;
+}
+
+/* Chrome, Edge, Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 7px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Background */
+  --background: #090b10;
+  --background-alt: #11151d;
+
+  /* Card & Surface */
+  --card: #181f2b;
+  --card-hover: #1d2635;
+
+  /* Text */
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --subtle: #64748b;
+
+  /* Border */
+  --border: #232c3a;
+
+  /* Accent */
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-highlight: #60a5fa;
+  --accent-deep: #1e3a5f;
+
+  /* Effects */
+  --surface-shadow: rgba(0, 0, 0, 0.25);
+  --accent-shadow: rgba(59, 130, 246, 0.18);
+
+  /* Layout */
+  --navbar-height: 4rem;
+}
+
+/* Lock background scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Modal content scrolling */
+.modal-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-highlight: var(--accent-highlight);
+  --color-accent-deep: var(--accent-deep);
+
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --radius-xl: 1.5rem;
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--navbar-height) + 1rem);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  color: var(--foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Project Card Reveal Animation */
+@keyframes projectReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.project-card-enter {
+  opacity: 0;
+  animation: projectReveal 550ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: opacity, transform, filter;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .project-card-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    will-change: auto;
+  }
+}
+
+/* Modal entrance */
+@keyframes modalEnter {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Modal exit */
+@keyframes modalExit {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+.project-modal-enter {
+  animation: modalEnter 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+.project-modal-exit {
+  animation: modalExit 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-modal-enter,
+  .project-modal-exit {
+    animation-duration: 1ms;
+  }
+}
+
+@keyframes tab-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.tab-content-enter {
+  animation: tab-content-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform, filter;
 }

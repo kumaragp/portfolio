@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kumara Galan Pramana — Portfolio
+
+A dark monochrome portfolio for an Information Systems graduate interested in Data Analytics, Machine Learning, and Software Development. Project descriptions and technologies are maintained in centralized TypeScript data, with statically generated detail pages for each listed project.
+
+## Technology
+
+- Next.js App Router
+- React and TypeScript
+- Tailwind CSS v4
+- Lucide React
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and run the development server:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run start
+```
 
-## Learn More
+## Project Detail Pages
 
-To learn more about Next.js, take a look at the following resources:
+Project content is managed in `src/data/projects.ts`. Each project slug is used to generate a static route at `/projects/[slug]`. Optional detail fields, images, and public links are only shown when present in the data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## SEO and Production URL
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set `SITE_URL` to the actual production origin in the Vercel project environment before building for deployment. It must be an absolute origin without a path, query, or credentials. The value is intentionally not set in this repository because the production domain has not been provided.
 
-## Deploy on Vercel
+When `SITE_URL` is unset, canonical URLs and the sitemap's absolute URLs are omitted; the sitemap contains no entries and `robots.txt` does not advertise a sitemap. Once configured, the sitemap includes the homepage and projects marked `public`; private projects are excluded and marked `noindex`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+No portfolio-branded favicon or social preview image is currently available. The existing Next.js starter favicon should be replaced with an approved brand asset. When a real social preview image is provided, place it at `public/images/social-preview.png` at 1200 × 630 pixels and add it to the metadata configuration. No placeholder image or domain is used.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```text
+src/
+├── app/
+│   ├── robots.ts
+│   ├── sitemap.ts
+│   ├── projects/[slug]/
+│   │   ├── page.tsx
+│   │   └── not-found.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── lib/
+│   └── site.ts
+├── components/
+│   ├── projects/
+│   ├── sections/
+│   └── ui/
+└── data/
+    ├── contact.ts
+    ├── education.ts
+    ├── projects.ts
+    └── skills.ts
+```
+
+## Deployment
+
+The project can be deployed to Vercel using the standard Next.js deployment flow. Run `npm run build` locally before deployment.
